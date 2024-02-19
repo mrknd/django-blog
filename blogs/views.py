@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
-from django.http import HttpResponse
 from django.shortcuts import get_object_or_404
+from django.db.models import Q
 
 from .models import Blog, Category
 
@@ -23,3 +23,26 @@ def posts_by_category(request, category_id):
         'category': category,
     }
     return render(request=request, template_name='posts_by_category.html', context=context)
+
+
+def blogs(request, slug):
+    single_blog = get_object_or_404(Blog, slug=slug, status='Published')
+    context = {
+        'single_blog': single_blog,
+    }
+    return render(request=request, template_name='blogs.html', context=context)
+
+
+def search(request):
+    keyword = request.GET.get('keyword')
+
+    blogs = Blog.objects.filter(
+        Q(title__icontains=keyword) | Q(short_description__icontains=keyword) | Q(blog_body__icontains=keyword),
+        status='Published')
+
+    context = {
+        'blogs': blogs,
+        'keyword': keyword,
+    }
+    print(blogs)
+    return render(request=request, template_name='search.html', context=context)
