@@ -31,7 +31,10 @@ urlpatterns = [
     path('blogs/search/', BlogsView.search, name='search'),
     path('register/', views.register, name='register'),
     path('login/', views.login, name='login'),
-    path('logput/', views.logout, name='logout')
+    path('logput/', views.logout, name='logout'),
+
+    # Dashboards
+    path('dashboard/', include('dashboards.urls')),
 
 ]
 
